@@ -1,17 +1,170 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Federated Living Solutions</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Federated Living Solutions</title>
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<h1>Federated Living Solutions</h1>
+  <header>
+    <nav class="nav-extended fls-nav">
+      <div class="nav-wrapper nav-full-width">
+        <a href="#" class="brand-logo">
+          <img src="images/logo_design_only.png" alt="Federated Living Solutions" class="nav-logo">
+        </a>
+        <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="#what-we-do">What we do</a></li>
+          <li><a href="#who-we-are">Who we are</a></li>
+          <li><a href="#creative-financing">Creative financing</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+    <ul class="sidenav" id="mobile-nav">
+      <li><a href="#what-we-do">What we do</a></li>
+      <li><a href="#who-we-are">Who we are</a></li>
+      <li><a href="#creative-financing">Creative financing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </header>
 
-<p>
-Helping property owners explore creative financing solutions.
-</p>
+  <main>
+    <section class="hero">
+      <div class="hero-image-wrap">
+        <img src="images/hero_image.png" alt="" class="hero-img responsive-img">
+      </div>
+      <h1 class="hero-title">Federated Living Solutions</h1>
+    </section>
 
-<a href="contact.html">Contact Us</a>
+    <section id="what-we-do" class="section scrollspy">
+      <div class="container">
+        <h2 class="section-title">What we do</h2>
+        <div class="row">
+          <div class="col s12 m6 l4">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title fls-primary-text">Creative financing</span>
+                <p>We help property owners and investors structure deals that work when traditional lending doesn't.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 l4">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title fls-primary-text">Deal structuring</span>
+                <p>Seller financing, lease options, subject-to arrangements, and other creative solutions tailored to your situation.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6 l4">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title fls-primary-text">Guidance & support</span>
+                <p>From first conversation to closing, we guide you through the process with clarity and expertise.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <section id="who-we-are" class="section grey lighten-4 scrollspy">
+      <div class="container">
+        <h2 class="section-title">Who we are</h2>
+        <div class="row">
+          <div class="col s12 m8 offset-m2">
+            <p class="flow-text">Federated Living Solutions is dedicated to making property ownership and investing accessible through creative financing. We believe that flexible, well-structured deals benefit both property owners and buyers, and we work to find solutions that fit your goals.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="creative-financing" class="section scrollspy">
+      <div class="container">
+        <h2 class="section-title">About creative financing</h2>
+        <div class="row">
+          <div class="col s12 l8 offset-l2">
+            <p class="flow-text">Creative financing goes beyond conventional bank loans. It includes seller financing, where the seller acts as the lender; lease options that let you control and eventually own property; and subject-to deals that assume existing mortgages. These strategies can unlock opportunities when traditional financing isn't available or desirable. We help you understand your options and structure agreements that are clear, compliant, and aligned with your objectives.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section grey lighten-4 scrollspy">
+      <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <div class="row">
+          <div class="col s12 m6">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title fls-primary-text">Get in touch</span>
+                <p>Reach out to discuss your situation and explore how creative financing might work for you.</p>
+                <p><i class="material-icons left fls-primary-text">email</i> <a href="mailto:contact@federatedliving.com">contact@federatedliving.com</a></p>
+                <p><i class="material-icons left fls-primary-text">phone</i> (555) 123-4567</p>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title fls-primary-text">Send a message</span>
+                <form class="contact-form">
+                  <div class="input-field">
+                    <input id="contact-name" type="text" class="validate" required>
+                    <label for="contact-name">Name</label>
+                  </div>
+                  <div class="input-field">
+                    <input id="contact-email" type="email" class="validate" required>
+                    <label for="contact-email">Email</label>
+                  </div>
+                  <div class="input-field">
+                    <textarea id="contact-message" class="materialize-textarea" required></textarea>
+                    <label for="contact-message">Message</label>
+                  </div>
+                  <button type="submit" class="btn waves-effect waves-light fls-btn">Send</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer fls-primary">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <p class="white-text">&copy; Federated Living Solutions. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      M.Sidenav.init(document.querySelectorAll('.sidenav'), {});
+      M.ScrollSpy.init(document.querySelectorAll('.scrollspy'), { scrollOffset: 64 });
+    });
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          var sidenav = M.Sidenav.getInstance(document.getElementById('mobile-nav'));
+          if (sidenav && sidenav.isOpen) sidenav.close();
+        }
+      });
+    });
+  </script>
 </body>
 </html>

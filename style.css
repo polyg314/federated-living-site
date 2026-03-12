@@ -1,4 +1,146 @@
+/* Federated Living Solutions – orange theme & overrides */
+
+:root {
+  --primary: rgb(239, 121, 44);
+  --primary-dark: rgb(210, 100, 35);
+  --primary-light: rgba(239, 121, 44, 0.15);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-    font-family: Arial;
-    margin: 40px;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Theme overrides */
+.fls-primary {
+  background-color: var(--primary) !important;
+}
+
+.fls-nav {
+  background: linear-gradient(180deg, #000 0%, #000 calc(100% - 4px), #fdfdfd 100%) !important;
+}
+
+.fls-primary-text {
+  color: var(--primary) !important;
+}
+
+.fls-btn {
+  background-color: var(--primary) !important;
+}
+
+.fls-btn:hover {
+  background-color: var(--primary-dark) !important;
+}
+
+/* Navbar */
+.nav-full-width {
+  max-width: none;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.nav-logo {
+  height: 48px;
+  width: auto;
+  vertical-align: middle;
+}
+
+nav .nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+nav .brand-logo {
+  display: flex;
+  align-items: center;
+  margin-left: 0;
+}
+
+nav #nav-mobile {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+nav ul a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+nav ul a:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Hero / Jumbotron */
+.hero {
+  padding: 0 1rem 2rem;
+  background-color: #fdfdfd;
+}
+
+.hero-image-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  vertical-align: top;
+}
+
+.hero-title {
+  color: #000;
+  font-weight: 800;
+  margin: 0;
+  padding-top: 0.25rem;
+  text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  .hero {
+    padding: 0 0.75rem 1.5rem;
   }
+
+  .hero-image-wrap {
+    max-width: 100%;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+  }
+}
+
+/* Sections */
+.section {
+  padding: 4rem 0;
+}
+
+#what-we-do {
+  background-color: #e0e0e0;
+}
+
+.section-title {
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Cards – accent border or subtle highlight */
+.card .card-title.fls-primary-text {
+  font-weight: 600;
+}
+
+/* Footer */
+.page-footer {
+  padding: 1.5rem 0;
+  margin-top: 0;
+}
+
+.page-footer .container .row {
+  margin-bottom: 0;
+}
