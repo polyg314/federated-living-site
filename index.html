@@ -38,7 +38,8 @@
   </header>
 
   <main>
-    <section class="hero" style="background-image: url('images/hero.gif');">
+    <section class="hero">
+      <img src="images/hero.gif" alt="" class="hero-bg-image" aria-hidden="true">
       <div class="hero-overlay" id="hero-overlay" aria-hidden="true"></div>
       <div class="hero-content">
         <h1 class="hero-title">Federated Living Solutions</h1>
@@ -161,6 +162,8 @@
     </section>
 
     <section id="contact" class="section contact-section scrollspy">
+      <img src="images/hero.gif" alt="" class="contact-bg-image" aria-hidden="true">
+      <div class="contact-overlay" id="contact-overlay" aria-hidden="true"></div>
       <div class="container contact-section-inner">
         <h2 class="section-title">Contact Us</h2>
         <div class="contact-info">
@@ -171,6 +174,10 @@
           <p class="contact-item">
             <i class="material-icons fls-primary-text">schedule</i>
             <span class="contact-hours">Monday–Friday, 9am–5pm PST</span>
+          </p>
+          <p class="contact-item">
+            <i class="material-icons fls-primary-text">event_available</i>
+            <a href="https://calendly.com" target="_blank" rel="noopener noreferrer">Book us on Calendly</a>
           </p>
         </div>
       </div>
@@ -353,6 +360,29 @@
       window.addEventListener('scroll', function() { requestAnimationFrame(updateEducationCoachingSticky); });
       window.addEventListener('resize', function() { requestAnimationFrame(updateEducationCoachingSticky); });
       updateEducationCoachingSticky();
+
+      // Contact: white overlay fades to 0 as section enters view so GIF is visible when you're on Contact
+      var contactSection = document.getElementById('contact');
+      var contactOverlay = document.getElementById('contact-overlay');
+
+      function updateContactOverlay() {
+        if (!contactSection || !contactOverlay) return;
+        var rect = contactSection.getBoundingClientRect();
+        var vh = window.innerHeight;
+        var opacity;
+        if (rect.top >= vh) {
+          opacity = 1;   /* section below: white */
+        } else if (rect.top <= 0) {
+          opacity = 0;   /* section in view: show GIF */
+        } else {
+          opacity = rect.top / vh;   /* fading as section enters */
+        }
+        contactOverlay.style.opacity = Math.max(0, Math.min(1, opacity));
+      }
+
+      window.addEventListener('scroll', function() { requestAnimationFrame(updateContactOverlay); });
+      window.addEventListener('resize', function() { requestAnimationFrame(updateContactOverlay); });
+      updateContactOverlay();
     });
 
     document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {

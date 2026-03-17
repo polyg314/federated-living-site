@@ -13,7 +13,7 @@ html {
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #fff;
+  background-color: #f2f2f4;
   overflow-x: hidden;
 }
 
@@ -115,21 +115,30 @@ nav ul a:hover {
   text-transform: uppercase;
 }
 
-/* Hero / Jumbotron – GIF full width, white above if viewport taller than image */
+/* Hero / Jumbotron – GIF full width at bottom, white above if needed */
 .hero {
   position: relative;
   min-height: calc(100vh - 64px);
   padding: 28vh 2rem 4rem 2rem;
-  background-color: #fff;
-  background-size: 100% auto;
-  background-position: center bottom;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background-color: #f2f2f4;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   max-width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* GIF as img so it always shows at all screen widths (fixed background fails on mobile) */
+.hero-bg-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .hero-overlay {
@@ -138,7 +147,7 @@ nav ul a:hover {
   background-color: #fff;
   opacity: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   transition: opacity 0.08s ease-out;
 }
 
@@ -158,7 +167,7 @@ nav ul a:hover {
 /* Title fixed in viewport, opacity controlled by JS as hero scrolls away */
 .hero-title {
   position: fixed;
-  top: 40vh;
+  top: 30vh;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -168,14 +177,28 @@ nav ul a:hover {
   box-sizing: border-box;
   pointer-events: none;
   z-index: 2;
-  color: #00003c;
+  color: #1a1a1a;
   font-weight: 700;
-  background: white;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
   font-size: clamp(2.25rem, 8vw, 7rem);
   text-align: center;
-  font-weight: 900;
-  line-height: 1.2;
+  line-height: 1.25;
+}
+
+/* Desktop: fixed background so GIF stays steady as next section scrolls up */
+@media screen and (min-width: 769px) {
+  .hero {
+    background-image: url('images/hero.gif');
+    background-size: 100% auto;
+    background-position: center bottom;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+
+  .hero-bg-image {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -304,7 +327,7 @@ nav ul a:hover {
 
 /* What We Do – same layout and styling as Who We Are */
 #what-we-do {
-  background-color: #fff !important;
+  background-color: #f2f2f4 !important;
   /* min-height: 80vh; */
   display: flex;
   align-items: stretch;
@@ -391,7 +414,7 @@ nav ul a:hover {
 
 /* Education & Coaching – same layout and styling as Who We Are / What We Do */
 #education-coaching {
-  background-color: #fff !important;
+  background-color: #f2f2f4 !important;
   display: flex;
   align-items: stretch;
   padding: 0;
@@ -498,7 +521,7 @@ nav ul a:hover {
 
 /* Our Approach – same layout as Who We Are / What We Do; content is cards */
 #our-approach {
-  background-color: #fff !important;
+  background-color: #e2e4ec !important;
   display: flex;
   align-items: stretch;
   padding: 0;
@@ -644,22 +667,65 @@ nav ul a:hover {
   font-weight: 600;
 }
 
-/* Contact – full viewport minus header/footer, white, email + work hours */
+/* Contact – same GIF as hero; desktop: fixed so section scrolls up to reveal it; mobile: img */
 #contact.contact-section {
-  background-color: #fff !important;
+  position: relative;
+  background-color: #f2f2f4;
   padding: 0;
   min-height: calc(100vh - 64px - 80px);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.contact-bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Desktop: fixed GIF so section scrolls up to reveal it (like hero) */
+@media screen and (min-width: 769px) {
+  #contact.contact-section {
+    background-image: url('images/hero.gif');
+    background-size: 100% auto;
+    background-position: center bottom;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+
+  #contact .contact-bg-image {
+    display: none;
+  }
+}
+
+.contact-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #fff;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.2s ease-out;
 }
 
 .contact-section-inner {
+  position: relative;
+  z-index: 2;
   width: 100%;
-  max-width: 1280px;
+  max-width: 560px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 2.5rem 2rem;
   text-align: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
 #contact .section-title {
