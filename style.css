@@ -4,6 +4,9 @@
   --primary: rgb(239, 121, 44);
   --primary-dark: rgb(210, 100, 35);
   --primary-light: rgba(239, 121, 44, 0.15);
+  --house-blue: #1a2d4a;
+  --house-sky: #c7d7e8;
+  --house-sky-soft: #87b0dc;
 }
 
 html {
@@ -13,7 +16,7 @@ html {
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f2f2f4;
+  background-color: #fafbfc;
   overflow-x: hidden;
 }
 
@@ -115,89 +118,358 @@ nav ul a:hover {
   text-transform: uppercase;
 }
 
-/* Hero / Jumbotron – GIF full width at bottom, white above if needed */
+/* Hero – same flat bg as Who We Are (no gradient seam or scroll color shift) */
 .hero {
   position: relative;
   min-height: calc(100vh - 64px);
   padding: 28vh 2rem 4rem 2rem;
-  background-color: #f2f2f4;
+  background-color: #fafbfc;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   max-width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
 }
-
-/* GIF as img so it always shows at all screen widths (fixed background fails on mobile) */
-.hero-bg-image {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  display: block;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background-color: #fff;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1;
-  transition: opacity 0.08s ease-out;
-}
-
 
 .hero-content {
   position: relative;
   z-index: 1;
-  max-width: min(80%, 100%);
+  max-width: min(90%, 100%);
   margin: 0 auto;
   text-align: center;
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  min-height: 20vh; /* reserves space; title is fixed so it overlays */
+  min-height: 20vh;
 }
 
-/* Title fixed in viewport, opacity controlled by JS as hero scrolls away */
-.hero-title {
+/* Fixed cluster: text + houses; CSS-only houses respond to --hero-scroll */
+.hero-cluster {
   position: fixed;
-  top: 30vh;
+  top: 47%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   width: 100%;
-  max-width: 80%;
-  margin: 0;
-  padding: 0 2rem;
+  max-width: 44rem;
+  padding: 0 1.75rem;
   box-sizing: border-box;
   pointer-events: none;
   z-index: 2;
-  color: #1a1a1a;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: clamp(2.25rem, 8vw, 7rem);
   text-align: center;
-  line-height: 1.25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Desktop: fixed background so GIF stays steady as next section scrolls up */
-@media screen and (min-width: 769px) {
-  .hero {
-    background-image: url('images/hero.gif');
-    background-size: 100% auto;
-    background-position: center bottom;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+.hero-scroll-hint {
+  position: absolute;
+  bottom: clamp(1.25rem, 4vh, 2.25rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  text-decoration: none;
+  color: rgba(20, 21, 26, 0.45);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+  pointer-events: auto;
+}
+
+.hero-scroll-hint:hover,
+.hero-scroll-hint:focus-visible {
+  color: var(--primary);
+  outline: none;
+}
+
+.hero-scroll-hint__label {
+  display: block;
+}
+
+.hero-scroll-hint__icon {
+  font-size: 1.75rem !important;
+  width: 1.75rem;
+  height: 1.75rem;
+  line-height: 1 !important;
+  margin-top: -0.1rem;
+  animation: hero-scroll-hint-bob 2.2s ease-in-out infinite;
+}
+
+@keyframes hero-scroll-hint-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.hero-cluster-text {
+  width: 100%;
+}
+
+.hero-eyebrow {
+  margin: 0 0 1rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.hero-title {
+  margin: 0;
+  padding: 0;
+  color: #14151a;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: -0.02em;
+  font-size: clamp(2.05rem, 6.2vw, 3.85rem);
+  line-height: 1.12;
+  text-align: center;
+}
+
+.hero-tagline {
+  margin: 1.35rem 0 0;
+  padding: 0;
+  max-width: 34rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(1rem, 2.35vw, 1.28rem);
+  font-weight: 400;
+  line-height: 1.55;
+  color: rgba(20, 21, 26, 0.58);
+}
+
+/* Three pure-CSS houses: orange / dark blue / light blue; motion from --hero-scroll (0–1) */
+.hero-houses {
+  --hero-scroll: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(1.25rem, 4vw, 2.5rem);
+  margin-top: 2rem;
+  height: 5.25rem;
+  perspective: 420px;
+  transform-style: preserve-3d;
+}
+
+.hero-house {
+  --roof: var(--primary);
+  --wall: var(--house-blue);
+  --accent: var(--house-sky-soft);
+  width: 2.65rem;
+  height: 2.85rem;
+  margin-top: 1.05rem;
+  position: relative;
+  background-color: var(--wall);
+  box-shadow:
+    inset 0.38rem 0.4rem 0 -0.05rem var(--accent),
+    inset -0.38rem 0.4rem 0 -0.05rem var(--accent),
+    inset 0 0 0 1px rgba(255, 255, 255, calc(0.04 + var(--hero-scroll) * 0.08)),
+    0 calc(2px + var(--hero-scroll) * 10px) calc(6px + var(--hero-scroll) * 18px) rgba(15, 31, 54, calc(0.2 + var(--hero-scroll) * 0.16));
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.hero-house::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 2.85rem;
+  height: 1.05rem;
+  transform: translateX(-50%);
+  background-color: var(--roof);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  filter: brightness(calc(1 + var(--hero-scroll) * 0.04));
+}
+
+.hero-house::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0.55rem;
+  height: 0.95rem;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, var(--accent) 0%, rgba(15, 31, 54, 0.45) 100%);
+  border-radius: 1px 1px 0 0;
+  box-shadow: 0 -2px 0 0 rgba(15, 31, 54, 0.35);
+  opacity: calc(0.85 + var(--hero-scroll) * 0.15);
+}
+
+/* Scroll: color-mix shifts palette; translateZ + scale = forward/back (no rotate) */
+.hero-house--1 {
+  --roof: color-mix(
+    in srgb,
+    var(--primary) calc((1 - var(--hero-scroll)) * 100%),
+    var(--house-blue) calc(var(--hero-scroll) * 100%)
+  );
+  --wall: color-mix(
+    in srgb,
+    var(--house-blue) calc((1 - var(--hero-scroll)) * 100%),
+    var(--house-sky) calc(var(--hero-scroll) * 100%)
+  );
+  --accent: color-mix(
+    in srgb,
+    var(--house-sky) calc((1 - var(--hero-scroll)) * 100%),
+    var(--primary) calc(var(--hero-scroll) * 100%)
+  );
+  transform: translateZ(calc(-18px + var(--hero-scroll) * 42px))
+    scale(calc(0.94 + var(--hero-scroll) * 0.1));
+}
+
+.hero-house--2 {
+  --roof: color-mix(
+    in srgb,
+    var(--house-blue) calc((1 - var(--hero-scroll)) * 100%),
+    var(--house-sky) calc(var(--hero-scroll) * 100%)
+  );
+  --wall: color-mix(
+    in srgb,
+    var(--house-sky) calc((1 - var(--hero-scroll)) * 100%),
+    var(--primary) calc(var(--hero-scroll) * 100%)
+  );
+  --accent: color-mix(
+    in srgb,
+    var(--primary) calc((1 - var(--hero-scroll)) * 100%),
+    var(--house-blue) calc(var(--hero-scroll) * 100%)
+  );
+  transform: translateZ(calc(20px - var(--hero-scroll) * 44px))
+    scale(calc(1.02 - var(--hero-scroll) * 0.08));
+}
+
+.hero-house--3 {
+  --roof: color-mix(
+    in srgb,
+    var(--house-sky) calc((1 - var(--hero-scroll)) * 100%),
+    var(--primary) calc(var(--hero-scroll) * 100%)
+  );
+  --wall: color-mix(
+    in srgb,
+    var(--primary) calc((1 - var(--hero-scroll)) * 100%),
+    var(--house-blue) calc(var(--hero-scroll) * 100%)
+  );
+  --accent: color-mix(
+    in srgb,
+    var(--house-blue) calc((1 - var(--hero-scroll)) * 100%),
+    var(--house-sky) calc(var(--hero-scroll) * 100%)
+  );
+  transform: translateZ(calc(var(--hero-scroll) * (1 - var(--hero-scroll)) * 72px))
+    scale(calc(0.96 + var(--hero-scroll) * (1 - var(--hero-scroll)) * 0.12));
+}
+
+/* Large screens: ~3.5× base (prior 5× at 70%) */
+@media screen and (min-width: 1024px) {
+  .hero-houses {
+    gap: clamp(2.45rem, 5.6vw, 4.375rem);
+    margin-top: 2.5rem;
+    height: 18.55rem;
+    perspective: 840px;
   }
 
-  .hero-bg-image {
-    display: none;
+  .hero-house {
+    width: 9.275rem;
+    height: 9.975rem;
+    margin-top: 3.675rem;
+    box-shadow:
+      inset 1.33rem 1.4rem 0 -0.175rem var(--accent),
+      inset -1.33rem 1.4rem 0 -0.175rem var(--accent),
+      inset 0 0 0 2px rgba(255, 255, 255, calc(0.04 + var(--hero-scroll) * 0.08)),
+      0 calc(7px + var(--hero-scroll) * 35px) calc(21px + var(--hero-scroll) * 63px) rgba(15, 31, 54, calc(0.18 + var(--hero-scroll) * 0.14));
+  }
+
+  .hero-house::before {
+    width: 9.975rem;
+    height: 3.675rem;
+  }
+
+  .hero-house::after {
+    width: 1.925rem;
+    height: 3.325rem;
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 -7px 0 0 rgba(15, 31, 54, 0.3);
+  }
+
+  .hero-house--1 {
+    transform: translateZ(calc(-35px + var(--hero-scroll) * 84px))
+      scale(calc(0.94 + var(--hero-scroll) * 0.1));
+  }
+
+  .hero-house--2 {
+    transform: translateZ(calc(38px - var(--hero-scroll) * 88px))
+      scale(calc(1.02 - var(--hero-scroll) * 0.08));
+  }
+
+  .hero-house--3 {
+    transform: translateZ(calc(var(--hero-scroll) * (1 - var(--hero-scroll)) * 140px))
+      scale(calc(0.96 + var(--hero-scroll) * (1 - var(--hero-scroll)) * 0.12));
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .hero-cluster {
+    max-width: 48rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.65rem, 5vw, 4.85rem);
+  }
+
+  .hero-tagline {
+    max-width: 38rem;
+    font-size: clamp(1.1rem, 2.05vw, 1.48rem);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.8125rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .hero-cluster {
+    max-width: 56rem;
+  }
+
+  .hero-title {
+    font-size: clamp(3.15rem, 4.15vw, 6.15rem);
+  }
+
+  .hero-tagline {
+    max-width: 42rem;
+    font-size: clamp(1.15rem, 1.7vw, 1.65rem);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.875rem;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .hero-cluster {
+    max-width: 60rem;
+  }
+
+  .hero-title {
+    font-size: clamp(3.4rem, 3.75vw, 6.85rem);
+  }
+
+  .hero-tagline {
+    max-width: 44rem;
+    font-size: clamp(1.2rem, 1.55vw, 1.8rem);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.9375rem;
+    letter-spacing: 0.2em;
   }
 }
 
@@ -208,15 +480,42 @@ nav ul a:hover {
     align-items: flex-start;
   }
 
-  .hero-content {
-    text-align: center;
+  .hero-cluster {
+    max-width: 100%;
+    padding: 0 1.25rem;
+    top: 44%;
+  }
+
+  .hero-houses {
+    margin-top: 1.5rem;
+    gap: 1rem;
+    height: 4.75rem;
+  }
+
+  .hero-house {
+    width: 2.2rem;
+    height: 2.4rem;
+    margin-top: 0.9rem;
+  }
+
+  .hero-house::before {
+    width: 2.35rem;
+    height: 0.9rem;
   }
 
   .hero-title {
-    text-align: center;
-    max-width: none;
-    font-size: 2.5rem;
-    margin: 0 auto;
+    font-size: clamp(1.7rem, 7.5vw, 2.45rem);
+    letter-spacing: -0.015em;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+  }
+
+  .hero-tagline {
+    margin-top: 1.1rem;
+    font-size: 1rem;
   }
 }
 
@@ -239,7 +538,7 @@ nav ul a:hover {
 }
 
 #who-we-are {
-  background-color: #fff !important;
+  background-color: #fafbfc !important;
   /* min-height: 80vh; */
   display: flex;
   align-items: stretch;
@@ -327,7 +626,7 @@ nav ul a:hover {
 
 /* What We Do – same layout and styling as Who We Are */
 #what-we-do {
-  background-color: #f2f2f4 !important;
+  background-color: #fff !important;
   /* min-height: 80vh; */
   display: flex;
   align-items: stretch;
