@@ -517,6 +517,10 @@ nav ul a:hover {
     margin-top: 1.1rem;
     font-size: 1rem;
   }
+
+  .hero-scroll-hint {
+    display: none;
+  }
 }
 
 /* Sections – extra spacing so scrolling is clear between sections */
@@ -966,10 +970,16 @@ nav ul a:hover {
   font-weight: 600;
 }
 
-/* Contact – same GIF as hero; desktop: fixed so section scrolls up to reveal it; mobile: img */
+/* Contact – GIF as fixed background (all widths). Was desktop-only because mobile used <img>;
+   iOS Safari may still treat background-attachment: fixed like scroll — browser limitation. */
 #contact.contact-section {
   position: relative;
   background-color: #f2f2f4;
+  background-image: url('images/hero.gif');
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+  background-attachment: fixed;
   padding: 0;
   min-height: calc(100vh - 64px - 80px);
   display: flex;
@@ -978,37 +988,16 @@ nav ul a:hover {
   overflow: hidden;
 }
 
-.contact-bg-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: center;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Desktop: fixed GIF so section scrolls up to reveal it (like hero) */
 @media screen and (min-width: 769px) {
   #contact.contact-section {
-    background-image: url('images/hero.gif');
     background-size: 100% auto;
-    background-position: center bottom;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-  }
-
-  #contact .contact-bg-image {
-    display: none;
   }
 }
 
 .contact-overlay {
   position: absolute;
   inset: 0;
-  background-color: #fff;
+  background-color: #ffffffdb;
   pointer-events: none;
   z-index: 1;
   transition: opacity 0.2s ease-out;
@@ -1064,27 +1053,63 @@ nav ul a:hover {
   color: rgba(0, 0, 0, 0.85);
 }
 
+/* Narrow viewports: inset card from viewport edges (global .container is width 100% on small screens) */
+@media screen and (max-width: 992px) {
+  #contact.contact-section {
+    padding: 2.5rem clamp(1.1rem, 5vw, 2rem) 2.75rem;
+    box-sizing: border-box;
+  }
+}
+
 @media screen and (max-width: 600px) {
+  #contact.contact-section {
+    padding-top: 2.25rem;
+    padding-bottom: 2.5rem;
+  }
+
   .contact-section-inner {
-    padding: 2rem 1rem;
+    padding: 1.65rem 1.4rem 1.85rem;
+  }
+
+  #contact .section-title {
+    margin-bottom: 1.65rem;
   }
 
   .contact-item {
     flex-direction: column;
     gap: 0.25rem;
+    font-size: 1rem;
+  }
+
+  .contact-item .material-icons {
+    font-size: 1.35rem;
   }
 }
 
-/* Footer */
+/* Footer – compact bar (Materialize row/col adds default vertical margin) */
 .page-footer {
-  padding: 1.5rem 0;
+  padding: 0.55rem 0;
   margin-top: 0;
 }
 
-.page-footer .white-text {
-  font-size: 1.15rem;
+.page-footer .container {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
-.page-footer .container .row {
-  margin-bottom: 0;
+.page-footer .row {
+  margin-top: 0;
+  margin-bottom: 0 !important;
+}
+
+.page-footer .col {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.page-footer .white-text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  text-align: center;
 }
