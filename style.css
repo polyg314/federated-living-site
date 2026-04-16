@@ -895,7 +895,11 @@ body.subpage-body .subpage-main {
   border: 1px solid rgba(26, 45, 74, 0.14);
   border-radius: 10px;
   margin-bottom: 0.65rem;
-  padding: 0.1rem 0.85rem 0.85rem;
+  padding: 0.1rem 0.85rem 0.15rem;
+}
+
+.sf-calc-expander[open] {
+  padding-bottom: 0.85rem;
 }
 
 .sf-calc-expander:last-child {
@@ -1090,6 +1094,16 @@ body.subpage-body .subpage-main {
   box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.15);
 }
 
+.sf-calc-field .sf-calc-input-with-prefix input.sf-calc-input--invalid {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.sf-calc-field .sf-calc-input-with-prefix:has(input.sf-calc-input--invalid) {
+  border-color: #c62828;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.15);
+}
+
 .sf-calc-field input[type='number'],
 .sf-calc-field input[type='text'] {
   width: 100%;
@@ -1107,37 +1121,86 @@ body.subpage-body .subpage-main {
 }
 
 .sf-calc-input-with-prefix {
-  position: relative;
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  border: 1px solid rgba(26, 45, 74, 0.2);
+  border-radius: 10px;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .sf-calc-input-prefix {
-  position: absolute;
-  top: 50%;
-  left: 0.75rem;
-  transform: translateY(-50%);
-  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding-left: 0.75rem;
+  font-size: 0.9375rem;
   font-weight: 600;
-  color: rgba(20, 21, 26, 0.6);
+  line-height: 1.2;
+  color: rgba(20, 21, 26, 0.55);
   pointer-events: none;
-  z-index: 1;
+  user-select: none;
 }
 
 .sf-calc-input-with-prefix input[type='number'],
 .sf-calc-input-with-prefix input[type='text'] {
-  padding-left: 1.65rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  border: 0;
+  border-radius: 0 10px 10px 0;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+  padding-left: 0.2rem;
+  padding-right: 0.75rem;
+  box-shadow: none;
+}
+
+/* Single orange focus ring; Materialize adds a teal bottom bar via box-shadow on inputs. */
+.sf-calc-input-with-prefix:focus-within {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-color: rgba(26, 45, 74, 0.2);
+  box-shadow: none;
+}
+
+.sf-calc-field .sf-calc-input-with-prefix input[type='number'].sf-calc-input--invalid:focus,
+.sf-calc-field .sf-calc-input-with-prefix input[type='text'].sf-calc-input--invalid:focus {
+  border-color: transparent;
+  box-shadow: none !important;
+}
+
+.sf-calc-field .sf-calc-input-with-prefix:has(input.sf-calc-input--invalid):focus-within {
+  outline: 2px solid #c62828;
+  outline-offset: 2px;
+  border-color: #c62828;
+  box-shadow: none;
 }
 
 .sf-calc-field input[type='number']:focus,
 .sf-calc-field input[type='text']:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border: 1px solid rgba(26, 45, 74, 0.2) !important;
+  box-shadow: none !important;
+}
+
+.sf-calc-field .sf-calc-input-with-prefix input[type='number']:focus,
+.sf-calc-field .sf-calc-input-with-prefix input[type='text']:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-light);
+  border-color: transparent !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
 }
 
 .sf-calc-field input[type='number'].sf-calc-input--invalid:focus,
 .sf-calc-field input[type='text'].sf-calc-input--invalid:focus {
-  border-color: #c62828;
-  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.2);
+  outline: 2px solid #c62828;
+  outline-offset: 2px;
+  border: 1px solid rgba(26, 45, 74, 0.2) !important;
+  box-shadow: none !important;
 }
 
 .sf-calc-checkbox-field {

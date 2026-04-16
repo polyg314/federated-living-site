@@ -19,6 +19,71 @@
     return `${(value * 100).toFixed(2)}%`;
   }
 
+  function parseMoneyInput(raw) {
+    if (raw === null || raw === undefined) return 0;
+    const s = String(raw).trim();
+    if (s === '') return 0;
+    const normalized = s.replace(/[^0-9.]/g, '');
+    if (normalized === '' || normalized === '.') return NaN;
+    const n = Number(normalized);
+    return Number.isFinite(n) ? n : NaN;
+  }
+
+  function finiteMoneyOrZero(raw) {
+    const n = parseMoneyInput(raw);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function formatMoneyInputValue(value) {
+    if (!Number.isFinite(value)) return '';
+    const rounded = Math.round(value);
+    return new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 0,
+    }).format(rounded);
+  }
+
+  function countDigitsBeforeIndex(str, index) {
+    let n = 0;
+    const end = Math.min(index, str.length);
+    for (let i = 0; i < end; i++) {
+      if (str[i] >= '0' && str[i] <= '9') n++;
+    }
+    return n;
+  }
+
+  function caretIndexAfterDigitCount(str, digitCount) {
+    if (digitCount <= 0) return 0;
+    let seen = 0;
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] >= '0' && str[i] <= '9') {
+        seen++;
+        if (seen === digitCount) return i + 1;
+      }
+    }
+    return str.length;
+  }
+
+  function setMoneyInputFormatted(el, numeric) {
+    if (!el) return;
+    const prev = el.value;
+    const next = formatMoneyInputValue(numeric);
+    const selStart = typeof el.selectionStart === 'number' ? el.selectionStart : null;
+    const selEnd = typeof el.selectionEnd === 'number' ? el.selectionEnd : null;
+
+    el.value = next;
+
+    if (selStart === null || selEnd === null) return;
+
+    const focused = document.activeElement === el;
+    if (!focused) return;
+
+    const digitsBefore = countDigitsBeforeIndex(prev, selStart);
+    const start = caretIndexAfterDigitCount(next, digitsBefore);
+    const digitsBeforeEnd = countDigitsBeforeIndex(prev, selEnd);
+    const end = caretIndexAfterDigitCount(next, digitsBeforeEnd);
+    el.setSelectionRange(start, end);
+  }
+
   function getMonthlyPayment({
     sellerNoteAmount,
     annualInterestRate,
@@ -317,9 +382,9 @@
 
   function getInputs() {
     return {
-      purchasePrice: Number(document.getElementById('purchasePrice').value),
-      askingPrice: Number(document.getElementById('askingPrice').value),
-      downPayment: Number(document.getElementById('downPayment').value),
+      purchasePrice: finiteMoneyOrZero(document.getElementById('purchasePrice').value),
+      askingPrice: finiteMoneyOrZero(document.getElementById('askingPrice').value),
+      downPayment: finiteMoneyOrZero(document.getElementById('downPayment').value),
       annualInterestRate: toDecimal(
         document.getElementById('annualInterestRate').value
       ),
@@ -512,6 +577,7 @@
     var root = document.querySelector('.sf-calc-card');
     if (!root) return;
 
+    var moneyIds = ['purchasePrice', 'askingPrice', 'downPayment'];
 
     var debounceId = null;
     function scheduleRun() {
@@ -524,7 +590,63 @@
       });
     }
 
+    function wireMoneyField(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+
+      var stepAttr = el.getAttribute('data-money-step');
+      var step = stepAttr ? Number(stepAttr) : 100;
+      if (!Number.isFinite(step) || step <= 0) step = 100;
+
+      function normalizeFromField() {
+        if (String(el.value).trim() === '') {
+          setMoneyInputFormatted(el, 0);
+          return;
+        }
+        var n = parseMoneyInput(el.value);
+        if (Number.isFinite(n)) {
+          setMoneyInputFormatted(el, n);
+        }
+      }
+
+      normalizeFromField();
+
+      el.addEventListener('blur', function () {
+        normalizeFromField();
+      });
+
+      el.addEventListener('keydown', function (ev) {
+        if (ev.key !== 'ArrowUp' && ev.key !== 'ArrowDown') return;
+        ev.preventDefault();
+        var n = parseMoneyInput(el.value);
+        if (!Number.isFinite(n)) n = 0;
+        var delta = ev.key === 'ArrowUp' ? step : -step;
+        if (ev.shiftKey) delta *= 10;
+        setMoneyInputFormatted(el, Math.max(0, n + delta));
+        scheduleRun();
+      });
+
+      el.addEventListener('input', function () {
+        if (String(el.value).trim() === '') {
+          scheduleRun();
+          return;
+        }
+        var n = parseMoneyInput(el.value);
+        if (Number.isFinite(n)) {
+          setMoneyInputFormatted(el, n);
+        } else {
+          setMoneyInputFormatted(el, finiteMoneyOrZero(el.value));
+        }
+        scheduleRun();
+      });
+
+      el.addEventListener('change', scheduleRun);
+    }
+
+    moneyIds.forEach(wireMoneyField);
+
     root.querySelectorAll('input').forEach(function (el) {
+      if (moneyIds.indexOf(el.id) !== -1) return;
       el.addEventListener('input', scheduleRun);
       el.addEventListener('change', scheduleRun);
     });
