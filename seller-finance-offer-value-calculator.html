@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Finance Cash Value Calculator | Federated Living Solutions</title>
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="subpage-body">
+  <header>
+    <nav class="nav-extended fls-nav">
+      <div class="nav-wrapper nav-full-width">
+        <a href="index.html" class="brand-logo">
+          <img src="images/logo_design_only.png" alt="Federated Living Solutions" class="nav-logo">
+        </a>
+        <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="seller-finance-offer-value-calculator.html" class="active">Seller finance calculator</a></li>
+          <li><a href="deal-structure-details.html">Deal structure details</a></li>
+          <li><a href="creative-financing-faq.html">Creative financing FAQ</a></li>
+        </ul>
+      </div>
+    </nav>
+    <ul class="sidenav" id="mobile-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="seller-finance-offer-value-calculator.html" class="active">Seller finance calculator</a></li>
+      <li><a href="deal-structure-details.html">Deal structure details</a></li>
+      <li><a href="creative-financing-faq.html">Creative financing FAQ</a></li>
+    </ul>
+  </header>
+
+  <main class="subpage-main sf-calc-page">
+    <div class="container sf-calc-container">
+      <div class="sf-calc-card">
+        <h1 class="sf-calc-title">Seller Finance Cash Value Calculator</h1>
+        <p class="sf-calc-subtitle">
+          Convert a seller-financed offer with monthly payments and a balloon into a
+          cash-equivalent value.
+        </p>
+
+        <div class="sf-calc-grid">
+          <section class="sf-calc-panel" aria-labelledby="sf-inputs-heading">
+            <h2 id="sf-inputs-heading" class="sf-calc-h2">Deal Terms</h2>
+
+            <div class="sf-calc-field">
+              <label for="purchasePrice">Purchase Price</label>
+              <div class="sf-calc-input-with-prefix">
+                <span class="sf-calc-input-prefix" aria-hidden="true">$</span>
+                <input id="purchasePrice" type="number" step="100" value="100000" inputmode="decimal" />
+              </div>
+            </div>
+
+            <div class="sf-calc-field">
+              <label for="askingPrice">Asking Price</label>
+              <div class="sf-calc-input-with-prefix">
+                <span class="sf-calc-input-prefix" aria-hidden="true">$</span>
+                <input id="askingPrice" type="number" step="100" value="100000" inputmode="decimal" />
+              </div>
+            </div>
+
+            <div class="sf-calc-field">
+              <label for="downPayment">Cash at Closing / Down Payment</label>
+              <div class="sf-calc-input-with-prefix">
+                <span class="sf-calc-input-prefix" aria-hidden="true">$</span>
+                <input id="downPayment" type="number" step="100" value="10000" inputmode="decimal" />
+              </div>
+              <p class="sf-calc-readonly-hint">Percent down: <span id="downPercentDisplay">—</span></p>
+            </div>
+
+
+
+
+            <div class="sf-calc-field sf-calc-field--readonly">
+              <span class="sf-calc-readonly-label">Seller note amount</span>
+              <div class="sf-calc-readonly-value" id="sellerNoteAmountDisplay" aria-live="polite">—</div>
+              <p class="sf-calc-readonly-hint">Purchase price − down payment</p>
+            </div>
+
+            <div class="sf-calc-field">
+              <label for="annualInterestRate">Seller Note Interest Rate (%)</label>
+              <input id="annualInterestRate" type="number" min="0" max="100" step="1" value="0" inputmode="numeric" />
+            </div>
+
+            <div class="sf-calc-field">
+              <label for="amortizationYears">Amortization (Years)</label>
+              <input id="amortizationYears" type="number" min="1" max="100" step="1" value="30" inputmode="numeric" />
+            </div>
+
+            <div class="sf-calc-field">
+              <label for="balloonYears">Balloon / Hold Period (Years)</label>
+              <input id="balloonYears" type="number" min="1" max="30" step="1" value="7" inputmode="numeric" />
+            </div>
+
+            <p id="sfAmortBalloonError" class="sf-calc-validation-error" role="alert" hidden>
+              Amortization must be greater than or equal to the balloon / hold period.
+            </p>
+
+            <div class="sf-calc-field sf-calc-checkbox-field">
+              <!-- Materialize expects input + span siblings; native input is hidden + pointer-events:none -->
+              <label class="sf-calc-checkbox-material">
+                <input id="interestOnly" type="checkbox" class="filled-in" />
+                <span>Interest only?</span>
+              </label>
+            </div>
+
+
+            <div class="sf-calc-field">
+              <label for="agentCommissionPercent">Estimated agent commission (%)</label>
+              <input
+                id="agentCommissionPercent"
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                value="3"
+                inputmode="numeric"
+              />
+            </div>
+
+            <h3 class="sf-calc-h3">Opportunity Cost Assumptions</h3>
+
+            <div class="sf-calc-field">
+              <label for="opportunityCostLow">Low (%)</label>
+              <input id="opportunityCostLow" type="number" min="0" step="1" value="2" inputmode="numeric" />
+            </div>
+
+            <div class="sf-calc-field">
+              <label for="opportunityCostMedium">Mid (%)</label>
+              <input id="opportunityCostMedium" type="number" min="0" step="1" value="3" inputmode="numeric" />
+            </div>
+
+            <div class="sf-calc-field">
+              <label for="opportunityCostHigh">High (%)</label>
+              <input id="opportunityCostHigh" type="number" min="0" step="1" value="6" inputmode="numeric" />
+            </div>
+          </section>
+
+          <section class="sf-calc-panel" aria-labelledby="sf-summary-heading">
+            <div class="sf-calc-summary-block">
+              <h2 id="sf-summary-heading" class="sf-calc-h2 sf-calc-h2--summary">Summary</h2>
+
+              <div class="sf-calc-metric sf-calc-metric--full-width sf-calc-metric--mid-oc-offer">
+                <div class="sf-calc-metric-label">Cash Equivalent Offer (Mid OC)</div>
+                <div class="sf-calc-metric-value" id="cashEquivalentMidOcOut">—</div>
+              </div>
+
+              <div class="sf-calc-summary-irr-wrap">
+                <table
+                  class="sf-calc-summary-irr-table"
+                  aria-label="Cash flows used for seller IRR"
+                >
+                  <thead>
+                    <tr>
+                      <th colspan="2">Seller IRR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Year 0</th>
+                      <td id="sfIrrCfYear0">—</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" id="sfIrrCfMonthsLabel">Balloon Payment Months 1 - 84</th>
+                      <td id="sfIrrCfMonthly">—</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" id="sfIrrCfPayoutLabel">Year 7 Payout</th>
+                      <td id="sfIrrCfBalloon">—</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="sf-calc-section-block">
+              <h2 class="sf-calc-h2">Seller Net Proceeds</h2>
+
+              <div class="sf-calc-table-wrap">
+                <table class="sf-calc-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Item</th>
+                      <th scope="col">Nominal</th>
+                      <th scope="col">Low OC</th>
+                      <th scope="col">Mid OC</th>
+                      <th scope="col">High OC</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Cash at Closing</td>
+                      <td id="nominalCashAtClosing">—</td>
+                      <td id="lowCashAtClosing">—</td>
+                      <td id="midCashAtClosing">—</td>
+                      <td id="highCashAtClosing">—</td>
+                    </tr>
+                    <tr>
+                      <td>Payments</td>
+                      <td id="nominalPayments">—</td>
+                      <td id="lowPayments">—</td>
+                      <td id="midPayments">—</td>
+                      <td id="highPayments">—</td>
+                    </tr>
+                    <tr>
+                      <td>Balloon</td>
+                      <td id="nominalBalloon">—</td>
+                      <td id="lowBalloon">—</td>
+                      <td id="midBalloon">—</td>
+                      <td id="highBalloon">—</td>
+                    </tr>
+                    <tr class="sf-calc-total-row">
+                      <td>Total (Equivalent Cash Offer)</td>
+                      <td id="nominalTotal">—</td>
+                      <td id="lowTotal">—</td>
+                      <td id="midTotal">—</td>
+                      <td id="highTotal">—</td>
+                    </tr>
+                    <tr>
+                      <td>Effective % of Asking Price</td>
+                      <td id="nominalPctOfAsk">—</td>
+                      <td id="lowPctOfAsk">—</td>
+                      <td id="midPctOfAsk">—</td>
+                      <td id="highPctOfAsk">—</td>
+                    </tr>
+                    <tr>
+                      <td>Seller IRR vs OC</td>
+                      <td id="nominalSellerIrr">—</td>
+                      <td id="lowSellerIrr">—</td>
+                      <td id="midSellerIrr">—</td>
+                      <td id="highSellerIrr">—</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="sf-calc-section-block sf-calc-section-block--compact">
+              <h3 class="sf-calc-h2 sf-calc-h3--agent-commission">Agent Commission</h3>
+              <div class="sf-calc-summary-grid sf-calc-summary-grid--agent-commission">
+                <div class="sf-calc-metric">
+                  <div class="sf-calc-metric-label">Commission Amount</div>
+                  <div class="sf-calc-metric-value" id="commissionAmountOut">—</div>
+                </div>
+                <div class="sf-calc-metric sf-calc-metric--cash-to-seller">
+                  <div class="sf-calc-metric-label">Cash to seller at signing</div>
+                  <div class="sf-calc-metric-value" id="cashToSellerOut">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sf-calc-explainer" aria-labelledby="sf-irr-explainer-heading">
+              <h3 id="sf-irr-explainer-heading" class="sf-calc-h3 sf-calc-h3--tight">
+                Understanding Seller IRR vs Opportunity Cost
+              </h3>
+
+              <details class="sf-calc-expander">
+                <summary>How Seller-Financing Cash Flows Work</summary>
+                <p>
+                  With seller financing, the seller is effectively the lender on
+                  the financed balance. Instead of receiving all cash at closing,
+                  the seller receives:
+                </p>
+                <ul class="sf-calc-explainer-list browser-default">
+                  <li>Cash at closing (down payment)</li>
+                  <li>Monthly payments during the hold period (Balloon / Hold Period)</li>
+                  <li>A balloon payoff at the end of the term (end of Balloon / Hold Period)</li>
+                </ul>
+
+              </details>
+
+              <details class="sf-calc-expander">
+                <summary>Seller IRR</summary>
+                <p>
+                  Seller IRR is the annualized return the seller earns on the seller-financed balance (the portion of the purchase price paid over time).
+                </p>
+                <p>It reflects the return generated by:</p>
+                <ul class="sf-calc-explainer-list browser-default">
+                  <li>Monthly payments</li>
+                  <li>The final balloon payoff</li>
+                </ul>
+                <p class="sf-calc-explainer-note">
+                  Think of this like the yield on a private loan or bond.
+                </p>
+              </details>
+
+              <details class="sf-calc-expander">
+                <summary>Opportunity Cost (Low, Mid, High)</summary>
+                <p>
+                  The Opportunity Cost inputs represent what the seller might
+                  reasonably expect to earn if they received cash today and
+                  invested it elsewhere.
+                </p>
+                <p>
+                  Because seller-financed offers pay part of the purchase price
+                  over time, those future payments are worth slightly less than
+                  cash received today. The calculator adjusts for this by
+                  converting the monthly payments and balloon payoff into their
+                  present value.
+                </p>
+                <p>
+                  This allows the seller-financed offer to be compared directly to
+                  a traditional cash offer today.
+                </p>
+                <p>
+                  The three opportunity cost assumptions represent different
+                  possible investment alternatives for the seller's money across a
+                  spectrum of return expectations.
+                </p>
+                <ul class="sf-calc-explainer-list browser-default">
+                  <li>
+                    A practical range is often between <strong>1%</strong> and
+                    <strong>6%+</strong>, depending on risk tolerance and
+                    available alternatives.
+                  </li>
+                  <li>
+                    Lower assumptions increase present value; higher assumptions
+                    decrease present value.
+                  </li>
+                </ul>
+                <p><strong>Example ranges:</strong></p>
+                <ul class="sf-calc-explainer-list">
+                  <li>
+                    <strong>1%-2%</strong> might represent very low-risk
+                    investments, such as:
+                    <ul class="sf-calc-explainer-sublist browser-default">
+                      <li>Treasury bills or high-yield savings</li>
+                      <li>Certificates of deposit (CDs)</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>3%-4%</strong> might represent moderate return
+                    expectations, such as:
+                    <ul class="sf-calc-explainer-sublist browser-default">
+                      <li>Conservative bond funds</li>
+                      <li>Private lending at relatively low risk</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>6%+</strong> might represent higher return
+                    expectations, such as:
+                    <ul class="sf-calc-explainer-sublist browser-default">
+                      <li>Real estate debt investments</li>
+                      <li>Private lending or other income-focused investments</li>
+                    </ul>
+                  </li>
+                </ul>
+                <p>
+                  By adjusting these assumptions, sellers and agents can see what
+                  the seller-financed offer is worth today under different return
+                  expectations.
+                </p>
+                <p class="sf-calc-explainer-note">
+                  In short: "What cash offer today is equivalent to these future
+                  payments?"
+                </p>
+              </details>
+
+              <details class="sf-calc-expander">
+                <summary>Seller IRR vs OC</summary>
+                <p>
+                  The last row compares the seller-financed return to each
+                  opportunity cost assumption:
+                </p>
+                <ul class="sf-calc-explainer-list browser-default">
+                  <li>
+                    <strong>Positive</strong> → the seller-financed return is
+                    higher than that alternative investment
+                  </li>
+                  <li>
+                    <strong>Negative</strong> → the return is lower than that
+                    alternative
+                  </li>
+                </ul>
+              </details>
+
+              <details class="sf-calc-expander">
+                <summary>Why This Matters</summary>
+                <p>
+                  Seller financing can often support a higher purchase price,
+                  while allowing the seller to receive:
+                </p>
+                <ul class="sf-calc-explainer-list browser-default">
+                  <li>Immediate cash at closing</li>
+                  <li>Income during the hold period</li>
+                  <li>A final balloon payoff</li>
+                </ul>
+                <p>
+                  It can also reduce pressure for future price cuts by keeping the
+                  headline price stronger while still giving the buyer terms that
+                  improve affordability.
+                </p>
+                <ul class="sf-calc-explainer-list browser-default">
+                  <li>
+                    If buyer financing is tight, terms can sometimes preserve more
+                    seller value than repeated listing price reductions.
+                  </li>
+                  <li>
+                    Use <strong>Total (Equivalent Cash Offer)</strong> to compare
+                    that structured offer directly against a clean cash offer.
+                  </li>
+                </ul>
+                <p>
+                  This calculator converts those future payments into a
+                  cash-equivalent value, helping sellers and agents evaluate the
+                  offer against a traditional cash sale.
+                </p>
+              </details>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-footer fls-primary">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <p class="white-text">&copy; 2026 Federated Living Solutions. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="seller-finance.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      M.Sidenav.init(document.querySelectorAll('.sidenav'), {});
+    });
+  </script>
+</body>
+</html>
