@@ -573,9 +573,100 @@
     renderResults(result);
   }
 
+  /**
+   * Optional URL query overrides for Deal Terms (shareable links), e.g.
+   * ?purchasePrice=350000&askingPrice=400000&downPayment=50000
+   * &interestRate=6&amortizationYears=30&balloonYears=7
+   * Aliases: purchase, asking, down | rate, annualInterestRate | amortization | balloon
+   */
+  function applyDealTermsFromQueryString() {
+    var search = window.location.search;
+    if (!search || search.length <= 1) return;
+
+    var params;
+    try {
+      params = new URLSearchParams(search);
+    } catch (e) {
+      return;
+    }
+
+    function first(names) {
+      for (var i = 0; i < names.length; i++) {
+        var v = params.get(names[i]);
+        if (v !== null && String(v).trim() !== '') return v;
+      }
+      return null;
+    }
+
+    function parseNum(raw) {
+      if (raw === null) return null;
+      var s = String(raw).trim();
+      if (s === '') return null;
+      var normalized = s.replace(/[^0-9.\-]/g, '');
+      if (normalized === '' || normalized === '.' || normalized === '-') return null;
+      var n = Number(normalized);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function setMoneyInput(id, raw) {
+      var n = parseNum(raw);
+      if (n === null) return;
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.value = String(Math.max(0, Math.round(n)));
+    }
+
+    function setNumberInput(id, raw, min, max, round) {
+      var n = parseNum(raw);
+      if (n === null) return;
+      var v = round ? Math.round(n) : n;
+      if (Number.isFinite(min)) v = Math.max(min, v);
+      if (Number.isFinite(max)) v = Math.min(max, v);
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.value = round ? String(v) : String(v);
+    }
+
+    setMoneyInput('purchasePrice', first(['purchasePrice', 'purchase']));
+    setMoneyInput('askingPrice', first(['askingPrice', 'asking']));
+    setMoneyInput(
+      'downPayment',
+      first(['downPayment', 'down', 'cashAtClosing'])
+    );
+    setNumberInput(
+      'annualInterestRate',
+      first(['interestRate', 'annualInterestRate', 'rate', 'sellerNoteRate']),
+      0,
+      100,
+      false
+    );
+    setNumberInput(
+      'amortizationYears',
+      first(['amortizationYears', 'amortization']),
+      1,
+      100,
+      true
+    );
+    setNumberInput(
+      'balloonYears',
+      first([
+        'balloonYears',
+        'balloon',
+        'balloonPeriod',
+        'holdPeriod',
+        'hold',
+      ]),
+      1,
+      30,
+      true
+    );
+  }
+
   function init() {
     var root = document.querySelector('.sf-calc-card');
     if (!root) return;
+
+    applyDealTermsFromQueryString();
 
     var moneyIds = ['purchasePrice', 'askingPrice', 'downPayment'];
 
