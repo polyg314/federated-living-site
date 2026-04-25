@@ -825,10 +825,12 @@
       copyBtn.addEventListener('click', function () {
         var url = getShareableCalculatorUrl();
         function showFeedback(message) {
+          var wrap = copyBtn ? copyBtn.closest('.sf-calc-copy-wrap') : null;
           if (copyFb) {
             copyFb.textContent = message;
             copyFb.hidden = false;
           }
+          if (wrap) wrap.classList.add('sf-calc-copy-wrap--feedback-visible');
           if (copyFbTimer !== null) window.clearTimeout(copyFbTimer);
           copyFbTimer = window.setTimeout(function () {
             copyFbTimer = null;
@@ -836,6 +838,7 @@
               copyFb.hidden = true;
               copyFb.textContent = '';
             }
+            if (wrap) wrap.classList.remove('sf-calc-copy-wrap--feedback-visible');
           }, 2500);
         }
         copyTextToClipboard(
