@@ -850,11 +850,47 @@ body.subpage-body .subpage-main {
 }
 
 .sf-calc-subtitle {
-  margin: 0 0 1.5rem;
+  margin: 0 0 0.65rem;
   color: rgba(20, 21, 26, 0.62);
   font-size: 1rem;
   line-height: 1.55;
   max-width: 52rem;
+}
+
+.sf-calc-share {
+  margin: 0 0 1.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+}
+
+.sf-calc-copy-link {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.sf-calc-copy-link:hover {
+  color: var(--primary-dark);
+}
+
+.sf-calc-copy-link:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.sf-calc-copy-feedback {
+  font-size: 0.875rem;
+  color: rgba(20, 21, 26, 0.55);
 }
 
 .sf-calc-h2 {

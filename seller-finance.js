@@ -662,6 +662,82 @@
     );
   }
 
+  function buildDealTermsQueryStringForShare() {
+    var p = new URLSearchParams();
+    p.set(
+      'purchasePrice',
+      String(Math.round(finiteMoneyOrZero(document.getElementById('purchasePrice').value)))
+    );
+    p.set(
+      'askingPrice',
+      String(Math.round(finiteMoneyOrZero(document.getElementById('askingPrice').value)))
+    );
+    p.set(
+      'downPayment',
+      String(Math.round(finiteMoneyOrZero(document.getElementById('downPayment').value)))
+    );
+
+    var rateEl = document.getElementById('annualInterestRate');
+    var rate = rateEl ? Number(rateEl.value) : 0;
+    if (!Number.isFinite(rate)) rate = 0;
+    rate = Math.max(0, Math.min(100, rate));
+    p.set('interestRate', String(rate));
+
+    var amortEl = document.getElementById('amortizationYears');
+    var balloonEl = document.getElementById('balloonYears');
+    var amortN = amortEl ? Math.round(Number(amortEl.value)) : 30;
+    var balloonN = balloonEl ? Math.round(Number(balloonEl.value)) : 7;
+    if (!Number.isFinite(amortN)) amortN = 30;
+    if (!Number.isFinite(balloonN)) balloonN = 7;
+    amortN = Math.max(1, Math.min(100, amortN));
+    balloonN = Math.max(1, Math.min(30, balloonN));
+    p.set('amortizationYears', String(amortN));
+    p.set('balloonYears', String(balloonN));
+    return p.toString();
+  }
+
+  function getShareableCalculatorUrl() {
+    var q = buildDealTermsQueryStringForShare();
+    if (window.location.protocol === 'file:') {
+      var href = window.location.href;
+      var base = href.split('#')[0].split('?')[0];
+      return base + (q ? '?' + q : '');
+    }
+    var origin = window.location.origin || '';
+    var path = window.location.pathname || '/';
+    return origin + path + (q ? '?' + q : '');
+  }
+
+  function copyTextToClipboard(text, onDone, onFail) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(onDone).catch(function () {
+        copyTextToClipboardFallback(text, onDone, onFail);
+      });
+    } else {
+      copyTextToClipboardFallback(text, onDone, onFail);
+    }
+  }
+
+  function copyTextToClipboardFallback(text, onDone, onFail) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (ok) onDone();
+      else onFail();
+    } catch (e) {
+      onFail();
+    }
+  }
+
   function init() {
     var root = document.querySelector('.sf-calc-card');
     if (!root) return;
@@ -741,6 +817,38 @@
       el.addEventListener('input', scheduleRun);
       el.addEventListener('change', scheduleRun);
     });
+
+    var copyBtn = document.getElementById('sfCopyShareLink');
+    var copyFb = document.getElementById('sfCopyShareFeedback');
+    var copyFbTimer = null;
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        var url = getShareableCalculatorUrl();
+        function showFeedback(message) {
+          if (copyFb) {
+            copyFb.textContent = message;
+            copyFb.hidden = false;
+          }
+          if (copyFbTimer !== null) window.clearTimeout(copyFbTimer);
+          copyFbTimer = window.setTimeout(function () {
+            copyFbTimer = null;
+            if (copyFb) {
+              copyFb.hidden = true;
+              copyFb.textContent = '';
+            }
+          }, 2500);
+        }
+        copyTextToClipboard(
+          url,
+          function () {
+            showFeedback('Copied to clipboard');
+          },
+          function () {
+            showFeedback('Copy blocked — copy the address from the bar or try HTTPS');
+          }
+        );
+      });
+    }
 
     runCalculation();
   }
