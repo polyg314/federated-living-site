@@ -886,13 +886,13 @@ body.subpage-body .subpage-main {
   box-sizing: border-box;
   /* Tuck into the card’s top-right (counteracts inner padding) */
   margin-top: -0.15rem;
-  margin-right: -0.45rem;
+  margin-right: -2.8rem;
 }
 
 @media screen and (min-width: 601px) {
   .sf-calc-copy-wrap {
     margin-top: -0.35rem;
-    margin-right: -1rem;
+    margin-right: -3.4rem;
   }
 }
 
